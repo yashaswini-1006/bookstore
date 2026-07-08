@@ -48,6 +48,11 @@
     .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
     .card h3 { margin-top: 0; }
     .card p { color: var(--muted); }
+    .status { color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+    .primary-btn {
+      border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 700;
+      background: var(--accent); color: white; margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -64,16 +69,56 @@
       </nav>
     </header>
 
+    <p id="cart-status" class="status"></p>
     <section class="cards">
-      <div class="card"><h3>Educated</h3><p>A memoir about resilience and self-discovery.</p></div>
-      <div class="card"><h3>1984</h3><p>A famous dystopian novel about power and truth.</p></div>
-      <div class="card"><h3>Sapiens</h3><p>A broad history of humanity from ancient times to today.</p></div>
-      <div class="card"><h3>To Kill a Mockingbird</h3><p>A powerful story of justice and empathy.</p></div>
+      <div class="card">
+        <h3>Educated</h3>
+        <p>A memoir about resilience and self-discovery.</p>
+        <button class="primary-btn" onclick="addToCart(5)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>1984</h3>
+        <p>A famous dystopian novel about power and truth.</p>
+        <button class="primary-btn" onclick="addToCart(6)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>Sapiens</h3>
+        <p>A broad history of humanity from ancient times to today.</p>
+        <button class="primary-btn" onclick="addToCart(10)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>To Kill a Mockingbird</h3>
+        <p>A powerful story of justice and empathy.</p>
+        <button class="primary-btn" onclick="addToCart(15)">Add to Cart</button>
+      </div>
     </section>
   </div>
 
   <script src="cart.js"></script>
   <script>
+    const books = [
+      { id: 5, title: 'Educated', price: 16.99 },
+      { id: 6, title: '1984', price: 11.99 },
+      { id: 10, title: 'Sapiens', price: 22 },
+      { id: 15, title: 'To Kill a Mockingbird', price: 12.5 }
+    ];
+
+    function addToCart(id) {
+      const book = books.find(item => item.id === id);
+      if (!book) return;
+
+      const cart = getCart();
+      if (cart[id]) {
+        cart[id].quantity += 1;
+      } else {
+        cart[id] = { title: book.title, price: book.price, quantity: 1 };
+      }
+
+      saveCart(cart);
+      updateCartCount();
+      document.getElementById('cart-status').textContent = `${book.title} added to cart!`;
+    }
+
     initializeTheme();
   </script>
 </body>

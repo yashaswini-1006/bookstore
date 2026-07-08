@@ -48,6 +48,11 @@
     .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
     .card h3 { margin-top: 0; }
     .card p { color: var(--muted); }
+    .status { color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+    .primary-btn {
+      border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 700;
+      background: var(--accent); color: white; margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -64,16 +69,56 @@
       </nav>
     </header>
 
+    <p id="cart-status" class="status"></p>
     <section class="cards">
-      <div class="card"><h3>Fantasy</h3><p>Epic adventures, magical worlds, and unforgettable journeys.</p></div>
-      <div class="card"><h3>Science Fiction</h3><p>Futuristic worlds, technology, and imagination.</p></div>
-      <div class="card"><h3>Romance</h3><p>Love stories, passion, and emotional connection.</p></div>
-      <div class="card"><h3>Biography</h3><p>Real stories, personal journeys, and powerful lessons.</p></div>
+      <div class="card">
+        <h3>Fantasy</h3>
+        <p>Epic adventures, magical worlds, and unforgettable journeys.</p>
+        <button class="primary-btn" onclick="addToCart(12)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>Science Fiction</h3>
+        <p>Futuristic worlds, technology, and imagination.</p>
+        <button class="primary-btn" onclick="addToCart(16)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>Romance</h3>
+        <p>Love stories, passion, and emotional connection.</p>
+        <button class="primary-btn" onclick="addToCart(3)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>Biography</h3>
+        <p>Real stories, personal journeys, and powerful lessons.</p>
+        <button class="primary-btn" onclick="addToCart(5)">Add to Cart</button>
+      </div>
     </section>
   </div>
 
   <script src="cart.js"></script>
   <script>
+    const books = [
+      { id: 12, title: 'Dune', price: 17.99 },
+      { id: 16, title: 'The Martian', price: 16.25 },
+      { id: 3, title: 'Pride and Prejudice', price: 12 },
+      { id: 5, title: 'Educated', price: 16.99 }
+    ];
+
+    function addToCart(id) {
+      const book = books.find(item => item.id === id);
+      if (!book) return;
+
+      const cart = getCart();
+      if (cart[id]) {
+        cart[id].quantity += 1;
+      } else {
+        cart[id] = { title: book.title, price: book.price, quantity: 1 };
+      }
+
+      saveCart(cart);
+      updateCartCount();
+      document.getElementById('cart-status').textContent = `${book.title} added to cart!`;
+    }
+
     initializeTheme();
   </script>
 </body>

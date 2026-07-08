@@ -48,6 +48,11 @@
     .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
     .card h3 { margin-top: 0; }
     .card p { color: var(--muted); }
+    .status { color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+    .primary-btn {
+      border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 700;
+      background: var(--accent); color: white; margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -64,16 +69,56 @@
       </nav>
     </header>
 
+    <p id="cart-status" class="status"></p>
     <section class="cards">
-      <div class="card"><h3>The Midnight Library</h3><p>A moving story about alternate lives and second chances.</p></div>
-      <div class="card"><h3>Atomic Habits</h3><p>Practical lessons for building better habits.</p></div>
-      <div class="card"><h3>Pride and Prejudice</h3><p>A classic romance full of wit and charm.</p></div>
-      <div class="card"><h3>The Hobbit</h3><p>A timeless fantasy adventure.</p></div>
+      <div class="card">
+        <h3>The Midnight Library</h3>
+        <p>A moving story about alternate lives and second chances.</p>
+        <button class="primary-btn" onclick="addToCart(1)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>Atomic Habits</h3>
+        <p>Practical lessons for building better habits.</p>
+        <button class="primary-btn" onclick="addToCart(2)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>Pride and Prejudice</h3>
+        <p>A classic romance full of wit and charm.</p>
+        <button class="primary-btn" onclick="addToCart(3)">Add to Cart</button>
+      </div>
+      <div class="card">
+        <h3>The Hobbit</h3>
+        <p>A timeless fantasy adventure.</p>
+        <button class="primary-btn" onclick="addToCart(4)">Add to Cart</button>
+      </div>
     </section>
   </div>
 
   <script src="cart.js"></script>
   <script>
+    const books = [
+      { id: 1, title: 'The Midnight Library', price: 14.99 },
+      { id: 2, title: 'Atomic Habits', price: 18.5 },
+      { id: 3, title: 'Pride and Prejudice', price: 12 },
+      { id: 4, title: 'The Hobbit', price: 15.75 }
+    ];
+
+    function addToCart(id) {
+      const book = books.find(item => item.id === id);
+      if (!book) return;
+
+      const cart = getCart();
+      if (cart[id]) {
+        cart[id].quantity += 1;
+      } else {
+        cart[id] = { title: book.title, price: book.price, quantity: 1 };
+      }
+
+      saveCart(cart);
+      updateCartCount();
+      document.getElementById('cart-status').textContent = `${book.title} added to cart!`;
+    }
+
     initializeTheme();
   </script>
 </body>
