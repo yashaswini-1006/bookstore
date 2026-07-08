@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --panel: #ffffff;
+      --accent: #6f4e37;
+      --text: #2f241d;
+      --muted: #6f655c;
+      --border: #e8dccf;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding: 20px 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    nav a {
+      margin-left: 12px;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .cart-panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item:last-child { border-bottom: none; }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary-btn {
+      background: #f0e2cf;
+      color: var(--accent);
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 12px 0;
+    }
+
+    .total {
+      margin-top: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Your Cart</h1>
+        <p>Review your chosen books.</p>
+      </div>
+      <nav>
+        <a href="index.html">Books</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+    </header>
+
+    <section class="cart-panel">
+      <div id="cart-items" class="empty">Your cart is empty.</div>
+      <div id="cart-total" class="total"></div>
+    </section>
+  </div>
+
+  <script src="cart.js"></script>
+  <script>
+    function saveCart(cart) {
+      localStorage.setItem('bookstore-cart', JSON.stringify(cart));
+      renderCart();
+      updateCartCount();
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const itemsContainer = document.getElementById('cart-items');
+      const totalEl = document.getElementById('cart-total');
+      const entries = Object.entries(cart);
+
+      if (entries.length === 0) {
+        itemsContainer.innerHTML = '<div class="empty">Your cart is empty.</div>';
+        totalEl.textContent = '';
+        return;
+      }
+
+      itemsContainer.innerHTML = entries.map(([id, item]) => `
+        <div class="cart-item">
+          <div>
+            <strong>${item.title}</strong><br />
+            <span>$${item.price.toFixed(2)} × ${item.quantity}</span>
+          </div>
+          <div>
+            <button class="secondary-btn" onclick="changeQuantity(${id}, -1)">-</button>
+            <button class="secondary-btn" onclick="changeQuantity(${id}, 1)">+</button>
+            <button class="secondary-btn" onclick="removeItem(${id})">Remove</button>
+          </div>
+        </div>
+      `).join('');
+
+      const total = entries.reduce((sum, [, item]) => sum + item.price * item.quantity, 0);
+      totalEl.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function changeQuantity(id, delta) {
+      const cart = getCart();
+      if (!cart[id]) return;
+      cart[id].quantity += delta;
+      if (cart[id].quantity <= 0) {
+        delete cart[id];
+      }
+      saveCart(cart);
+    }
+
+    function removeItem(id) {
+      const cart = getCart();
+      delete cart[id];
+      saveCart(cart);
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

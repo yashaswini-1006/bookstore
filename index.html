@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to the library!</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --panel: #ffffff;
+      --accent: #6f4e37;
+      --accent-2: #caa877;
+      --text: #2f241d;
+      --muted: #6f655c;
+      --border: #e8dccf;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 20px 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    nav a {
+      margin-left: 12px;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .count-badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .book-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    }
+
+    .book-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+    }
+
+    .book-card p {
+      margin: 6px 0;
+      color: var(--muted);
+    }
+
+    .price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 10px 0;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      background: var(--accent);
+      color: white;
+    }
+
+    .primary-btn:hover {
+      background: #53392b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Welcome to the library!</h1>
+        <p>Browse 20 books and build your reading list.</p>
+      </div>
+      <nav>
+        <a href="index.html">Books</a>
+        <a href="cart.html">Cart <span id="cart-count" class="count-badge">0</span></a>
+      </nav>
+    </header>
+
+    <section>
+      <h2>Featured Books</h2>
+      <div id="books-grid" class="books-grid"></div>
+    </section>
+  </div>
+
+  <script src="cart.js"></script>
+  <script>
+    const books = [
+      { id: 1, title: 'The Midnight Library', author: 'Matt Haig', price: 14.99, description: 'A moving story about alternate lives and second chances.' },
+      { id: 2, title: 'Atomic Habits', author: 'James Clear', price: 18.5, description: 'Practical lessons for building better habits.' },
+      { id: 3, title: 'Pride and Prejudice', author: 'Jane Austen', price: 12, description: 'A classic romance full of wit and charm.' },
+      { id: 4, title: 'The Hobbit', author: 'J.R.R. Tolkien', price: 15.75, description: 'A timeless fantasy adventure.' },
+      { id: 5, title: 'Educated', author: 'Tara Westover', price: 16.99, description: 'A memoir about resilience and self-discovery.' },
+      { id: 6, title: '1984', author: 'George Orwell', price: 11.99, description: 'A famous dystopian novel about power and truth.' },
+      { id: 7, title: 'The Alchemist', author: 'Paulo Coelho', price: 13.5, description: 'A poetic story about following your dreams.' },
+      { id: 8, title: 'Becoming', author: 'Michelle Obama', price: 19.99, description: 'A personal memoir of growth and leadership.' },
+      { id: 9, title: 'The Silent Patient', author: 'Alex Michaelides', price: 14.25, description: 'A gripping psychological thriller.' },
+      { id: 10, title: 'Sapiens', author: 'Yuval Noah Harari', price: 22, description: 'A broad history of humanity from ancient times to today.' },
+      { id: 11, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', price: 10.99, description: 'A dazzling portrait of wealth and longing.' },
+      { id: 12, title: 'Dune', author: 'Frank Herbert', price: 17.99, description: 'An epic science-fiction adventure.' },
+      { id: 13, title: 'The Catcher in the Rye', author: 'J.D. Salinger', price: 9.99, description: 'A classic coming-of-age novel.' },
+      { id: 14, title: 'The Psychology of Money', author: 'Morgan Housel', price: 15.5, description: 'A thoughtful look at how money shapes behavior.' },
+      { id: 15, title: 'To Kill a Mockingbird', author: 'Harper Lee', price: 12.5, description: 'A powerful story of justice and empathy.' },
+      { id: 16, title: 'The Martian', author: 'Andy Weir', price: 16.25, description: 'A witty survival story on Mars.' },
+      { id: 17, title: 'The Power of Now', author: 'Eckhart Tolle', price: 13.99, description: 'A guide to living fully in the present.' },
+      { id: 18, title: 'Circe', author: 'Madeline Miller', price: 18, description: 'A vivid retelling of an ancient myth.' },
+      { id: 19, title: 'The Road', author: 'Cormac McCarthy', price: 14, description: 'A haunting story about survival and love.' },
+      { id: 20, title: 'Crime and Punishment', author: 'Fyodor Dostoevsky', price: 11.5, description: 'A gripping novel about guilt and morality.' }
+    ];
+
+    function renderBooks() {
+      const grid = document.getElementById('books-grid');
+      grid.innerHTML = books.map(book => `
+        <article class="book-card">
+          <h3>${book.title}</h3>
+          <p><strong>by ${book.author}</strong></p>
+          <p>${book.description}</p>
+          <div class="price">$${book.price.toFixed(2)}</div>
+          <button class="primary-btn" onclick="addToCart(${book.id})">Add to Cart</button>
+        </article>
+      `).join('');
+    }
+
+    function addToCart(id) {
+      const cart = getCart();
+      const book = books.find(item => item.id === id);
+      if (!book) return;
+
+      if (cart[id]) {
+        cart[id].quantity += 1;
+      } else {
+        cart[id] = { title: book.title, price: book.price, quantity: 1 };
+      }
+
+      saveCart(cart);
+      updateCartCount();
+      window.location.href = 'cart.html';
+    }
+
+    renderBooks();
+    updateCartCount();
+  </script>
+</body>
+</html>
