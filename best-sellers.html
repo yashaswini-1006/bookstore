@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Sellers</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --panel: #ffffff;
+      --accent: #6f4e37;
+      --text: #2f241d;
+      --muted: #6f655c;
+      --border: #e8dccf;
+    }
+
+    body.dark {
+      --bg: #1c1816;
+      --panel: #2a2421;
+      --accent: #f1c28b;
+      --text: #f6efe8;
+      --muted: #d4c6b6;
+      --border: #4b4037;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+    header {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 20px 24px; background: var(--panel); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 20px;
+    }
+    nav { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    nav a { text-decoration: none; color: var(--accent); font-weight: 600; }
+    .theme-toggle {
+      border: 1px solid var(--border); background: var(--panel); color: var(--text);
+      padding: 8px 12px; border-radius: 999px; font-weight: 700; cursor: pointer;
+    }
+    .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .card h3 { margin-top: 0; }
+    .card p { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Best Sellers</h1>
+        <p>Popular picks readers return to again and again.</p>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="cart.html">Cart</a>
+        <button id="theme-toggle" class="theme-toggle" type="button">🌙 Dark</button>
+      </nav>
+    </header>
+
+    <section class="cards">
+      <div class="card"><h3>Educated</h3><p>A memoir about resilience and self-discovery.</p></div>
+      <div class="card"><h3>1984</h3><p>A famous dystopian novel about power and truth.</p></div>
+      <div class="card"><h3>Sapiens</h3><p>A broad history of humanity from ancient times to today.</p></div>
+      <div class="card"><h3>To Kill a Mockingbird</h3><p>A powerful story of justice and empathy.</p></div>
+    </section>
+  </div>
+
+  <script src="cart.js"></script>
+  <script>
+    initializeTheme();
+  </script>
+</body>
+</html>

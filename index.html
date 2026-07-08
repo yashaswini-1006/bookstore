@@ -137,6 +137,35 @@
     .primary-btn:hover {
       background: #53392b;
     }
+
+    .category-section {
+      margin-bottom: 24px;
+    }
+
+    .category-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .category-btn {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+
+    .category-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -152,6 +181,17 @@
         <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
       </nav>
     </header>
+
+    <section class="category-section">
+      <h2>Explore Our Collections</h2>
+      <div class="category-buttons">
+        <a class="category-btn" href="featured-books.html">Featured Books</a>
+        <a class="category-btn" href="best-sellers.html">Best Sellers</a>
+        <a class="category-btn" href="new-arrivals.html">New Arrivals</a>
+        <a class="category-btn" href="genres.html">Genres</a>
+        <a class="category-btn" href="reviews.html">Reviews</a>
+      </div>
+    </section>
 
     <section>
       <h2>Featured Books</h2>
