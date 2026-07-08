@@ -9,9 +9,20 @@
       --bg: #f7f3ea;
       --panel: #ffffff;
       --accent: #6f4e37;
+      --accent-2: #caa877;
       --text: #2f241d;
       --muted: #6f655c;
       --border: #e8dccf;
+    }
+
+    body.dark {
+      --bg: #1c1816;
+      --panel: #2a2421;
+      --accent: #f1c28b;
+      --accent-2: #d79b57;
+      --text: #f6efe8;
+      --muted: #d4c6b6;
+      --border: #4b4037;
     }
 
     * { box-sizing: border-box; }
@@ -21,6 +32,7 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     .container {
@@ -41,11 +53,31 @@
       border-radius: 16px;
     }
 
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     nav a {
-      margin-left: 12px;
       text-decoration: none;
       color: var(--accent);
       font-weight: 600;
+    }
+
+    .theme-toggle {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
     }
 
     .cart-panel {
@@ -102,6 +134,7 @@
       <nav>
         <a href="index.html">Books</a>
         <a href="cart.html">Cart</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
       </nav>
     </header>
 
