@@ -53,6 +53,19 @@
       border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 700;
       background: var(--accent); color: white; margin-top: 8px;
     }
+    .qty-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .qty-btn {
+      border: none; border-radius: 999px; width: 32px; height: 32px; cursor: pointer; font-weight: 700;
+      background: var(--accent); color: white;
+    }
+    .qty-value {
+      min-width: 20px; text-align: center; font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -74,22 +87,22 @@
       <div class="card">
         <h3>Circe</h3>
         <p>A vivid retelling of an ancient myth.</p>
-        <button class="primary-btn" onclick="addToCart(18)">Add to Cart</button>
+        <div id="action-18"></div>
       </div>
       <div class="card">
         <h3>The Martian</h3>
         <p>A witty survival story on Mars.</p>
-        <button class="primary-btn" onclick="addToCart(16)">Add to Cart</button>
+        <div id="action-16"></div>
       </div>
       <div class="card">
         <h3>The Psychology of Money</h3>
         <p>A thoughtful look at how money shapes behavior.</p>
-        <button class="primary-btn" onclick="addToCart(14)">Add to Cart</button>
+        <div id="action-14"></div>
       </div>
       <div class="card">
         <h3>The Road</h3>
         <p>A haunting story about survival and love.</p>
-        <button class="primary-btn" onclick="addToCart(19)">Add to Cart</button>
+        <div id="action-19"></div>
       </div>
     </section>
   </div>
@@ -103,23 +116,55 @@
       { id: 19, title: 'The Road', price: 14 }
     ];
 
-    function addToCart(id) {
+    function renderActions() {
+      books.forEach(book => {
+        const container = document.getElementById(`action-${book.id}`);
+        if (!container) return;
+
+        const quantity = getCartItemQuantity(book.id);
+        container.innerHTML = quantity > 0 ? `
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeCartQuantity(${book.id}, -1)">-</button>
+            <span class="qty-value">${quantity}</span>
+            <button class="qty-btn" onclick="changeCartQuantity(${book.id}, 1)">+</button>
+          </div>
+        ` : `<button class="primary-btn" onclick="addToCart(${book.id})">Add to Cart</button>`;
+      });
+    }
+
+    function changeCartQuantity(id, delta) {
       const book = books.find(item => item.id === id);
       if (!book) return;
 
       const cart = getCart();
-      if (cart[id]) {
-        cart[id].quantity += 1;
-      } else {
+      if (!cart[id]) {
+        if (delta < 0) {
+          saveCart(cart);
+          updateCartCount();
+          renderActions();
+          return;
+        }
         cart[id] = { title: book.title, price: book.price, quantity: 1 };
+      } else {
+        cart[id].quantity += delta;
+        if (cart[id].quantity <= 0) {
+          delete cart[id];
+        }
       }
 
       saveCart(cart);
       updateCartCount();
+      renderActions();
       document.getElementById('cart-status').textContent = `${book.title} added to cart!`;
     }
 
+    function addToCart(id) {
+      changeCartQuantity(id, 1);
+    }
+
     initializeTheme();
+    renderActions();
+    updateCartCount();
   </script>
 </body>
 </html>

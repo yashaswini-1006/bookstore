@@ -53,6 +53,19 @@
       border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 700;
       background: var(--accent); color: white; margin-top: 8px;
     }
+    .qty-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .qty-btn {
+      border: none; border-radius: 999px; width: 32px; height: 32px; cursor: pointer; font-weight: 700;
+      background: var(--accent); color: white;
+    }
+    .qty-value {
+      min-width: 20px; text-align: center; font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -74,22 +87,22 @@
       <div class="card">
         <h3>Educated</h3>
         <p>A memoir about resilience and self-discovery.</p>
-        <button class="primary-btn" onclick="addToCart(5)">Add to Cart</button>
+        <div id="action-5"></div>
       </div>
       <div class="card">
         <h3>1984</h3>
         <p>A famous dystopian novel about power and truth.</p>
-        <button class="primary-btn" onclick="addToCart(6)">Add to Cart</button>
+        <div id="action-6"></div>
       </div>
       <div class="card">
         <h3>Sapiens</h3>
         <p>A broad history of humanity from ancient times to today.</p>
-        <button class="primary-btn" onclick="addToCart(10)">Add to Cart</button>
+        <div id="action-10"></div>
       </div>
       <div class="card">
         <h3>To Kill a Mockingbird</h3>
         <p>A powerful story of justice and empathy.</p>
-        <button class="primary-btn" onclick="addToCart(15)">Add to Cart</button>
+        <div id="action-15"></div>
       </div>
     </section>
   </div>
@@ -103,23 +116,55 @@
       { id: 15, title: 'To Kill a Mockingbird', price: 12.5 }
     ];
 
-    function addToCart(id) {
+    function renderActions() {
+      books.forEach(book => {
+        const container = document.getElementById(`action-${book.id}`);
+        if (!container) return;
+
+        const quantity = getCartItemQuantity(book.id);
+        container.innerHTML = quantity > 0 ? `
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeCartQuantity(${book.id}, -1)">-</button>
+            <span class="qty-value">${quantity}</span>
+            <button class="qty-btn" onclick="changeCartQuantity(${book.id}, 1)">+</button>
+          </div>
+        ` : `<button class="primary-btn" onclick="addToCart(${book.id})">Add to Cart</button>`;
+      });
+    }
+
+    function changeCartQuantity(id, delta) {
       const book = books.find(item => item.id === id);
       if (!book) return;
 
       const cart = getCart();
-      if (cart[id]) {
-        cart[id].quantity += 1;
-      } else {
+      if (!cart[id]) {
+        if (delta < 0) {
+          saveCart(cart);
+          updateCartCount();
+          renderActions();
+          return;
+        }
         cart[id] = { title: book.title, price: book.price, quantity: 1 };
+      } else {
+        cart[id].quantity += delta;
+        if (cart[id].quantity <= 0) {
+          delete cart[id];
+        }
       }
 
       saveCart(cart);
       updateCartCount();
+      renderActions();
       document.getElementById('cart-status').textContent = `${book.title} added to cart!`;
     }
 
+    function addToCart(id) {
+      changeCartQuantity(id, 1);
+    }
+
     initializeTheme();
+    renderActions();
+    updateCartCount();
   </script>
 </body>
 </html>

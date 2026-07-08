@@ -15,6 +15,11 @@ function getCartItemCount() {
   return Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
 }
 
+function getCartItemQuantity(id) {
+  const cart = getCart();
+  return cart[id]?.quantity || 0;
+}
+
 function updateCartCount() {
   const countEl = document.getElementById('cart-count');
   if (countEl) {
